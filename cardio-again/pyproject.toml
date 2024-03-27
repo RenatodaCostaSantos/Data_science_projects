@@ -38,7 +38,7 @@ package_name = "cardio_again"
 project_name = "cardio_again"
 kedro_init_version = "0.19.0"
 tools = ['Linting', 'Testing', 'Custom Logging', 'Documentation', 'Data Structure', 'Kedro Viz']
-example_pipeline = "False"
+# example_pipeline = "False"
 source_dir = "src"
 
 [tool.pytest.ini_options]
