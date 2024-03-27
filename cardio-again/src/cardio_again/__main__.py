@@ -1,5 +1,5 @@
-"""cardio_disease_project file for ensuring the package is executable
-as `cardio-disease-project` and `python -m cardio_disease_project`
+"""cardio_again file for ensuring the package is executable
+as `cardio-again` and `python -m cardio_again`
 """
 import importlib
 from pathlib import Path
@@ -20,7 +20,7 @@ def _find_run_command(package_name):
         if run:
             # use run command from installed plugin if it exists
             return run
-        # use run command from `kedro.framework.cli.project`
+        # use run command from the framework project
         from kedro.framework.cli.project import run
 
         return run

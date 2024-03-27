@@ -36,7 +36,7 @@ loggers:
   kedro:
     level: INFO
 
-  cardio_disease_project:
+  cardio_again:
     level: INFO
 
 root:
