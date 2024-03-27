@@ -1,7 +1,0 @@
-heart:
-  type: pandas.CSVDataset
-  filepath: data/01_raw/heart.csv
-
-# reviews:
-#   type: pandas.CSVDataset
-#   filepath: data/01_raw/reviews.csv
