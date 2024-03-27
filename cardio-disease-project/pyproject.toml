@@ -38,7 +38,7 @@ package_name = "cardio_disease_project"
 project_name = "cardio_disease_project"
 kedro_init_version = "0.19.0"
 tools = ['Linting', 'Testing', 'Custom Logging', 'Documentation', 'Data Structure', 'PySpark', 'Kedro Viz']
-example_pipeline = "False"
+# example_pipeline = "False"
 source_dir = "src"
 
 [tool.pytest.ini_options]
