@@ -1,0 +1,35 @@
+[build-system]
+requires = [ "setuptools",]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cardio_disease_project"
+readme = "README.md"
+dynamic = [ "dependencies", "version",]
+
+[project.scripts]
+cardio-disease-project = "cardio_disease_project.__main__:main"
+
+[tool.kedro]
+package_name = "cardio_disease_project"
+project_name = "cardio_disease_project"
+kedro_init_version = "0.19.0"
+tools = "['Linting', 'Custom Logging']"
+
+[tool.ruff]
+line-length = 88
+show-fixes = true
+select = [ "F", "W", "E", "I", "UP", "PL", "T201",]
+ignore = [ "E501",]
+
+[project.entry-points."kedro.hooks"]
+
+[tool.setuptools.dynamic.dependencies]
+file = "requirements.txt"
+
+[tool.setuptools.dynamic.version]
+attr = "cardio_disease_project.__version__"
+
+[tool.setuptools.packages.find]
+where = [ "src",]
+namespaces = false
