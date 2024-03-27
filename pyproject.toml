@@ -20,6 +20,8 @@ kedro-viz = "^8.0.1"
 pytest-cov = "^5.0.0"
 pytest-mock = "^3.14.0"
 ruff = "^0.3.4"
+kedro-datasets = "^2.1.0"
+pyspark = "^3.5.1"
 
 
 [build-system]
