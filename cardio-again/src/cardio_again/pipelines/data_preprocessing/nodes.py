@@ -4,59 +4,124 @@ generated using Kedro 0.19.0
 """
 import pandas as pd
 
-def _separete_male_female(df: pd.DataFrame, string: pd.StringDtype) -> pd.DataFrame:
-    sex_df = df[df['Sex'] == string]
-    return sex_df
 
-def replace_int_with_float(df):
-    for col in df.columns:
-        if df[col].dtype == 'int64':  # Check if column type is int
-            df[col] = df[col].astype(float)  # Convert int to float
-    return df
-
-def _imput_median(list: pd.Series, df: pd.DataFrame,  sex: pd.StringDtype, median: pd.Float32Dtype,) -> pd.DataFrame:
-    for age in list:
-        try:
-            df.loc[(df['Sex'] == sex) & (df['Age'] >= age) & (df['Age'] <= age + 7) & (df['Cholesterol'] == 0), 'Cholesterol'] = median
-        except:
-            pass
-
-    return df
-
-def _calculate_median_resting_bp(df: pd.DataFrame, age_range) -> float:
+def separate_male_female(df: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
     """
-    Calculate the median resting blood pressure for a given age range.
+    Separate male and female records from the input DataFrame.
+
+    Args:
+        df: Input DataFrame with 'Sex' column.
+
+    Returns:
+        Tuple containing two DataFrames, one for males and one for females.
+    """
+    sex = ['M', 'F']
+    male = df[df['Sex'] == sex[0]]
+    female = df[df['Sex'] == sex[1]]
+    return male, female
+
+
+
+def replace_int_with_float(df_list: list) -> list:
+    """
+    Replace integer columns with float columns in a list of DataFrames.
+
+    Args:
+        df_list: List of input DataFrames.
+
+    Returns:
+        List of DataFrames with integer columns replaced by float columns.
+    """
+    updated_df_list = []
+    for df in df_list:
+        for col in df.columns:
+            if df[col].dtype == 'int64':  # Check if column type is int
+                df[col] = df[col].astype(float)  # Convert int to float
+        updated_df_list.append(df)
+
+    return updated_df_list
+
+
+
+def _divide_age_interval(df: pd.DataFrame, num_intervals: int) -> list:
+    """
+    Divide the interval between the minimum and maximum ages into the specified number of subintervals.men_list
     
     Parameters:
-        df (DataFrame): The DataFrame containing patient data.
-        age_range (tuple): A tuple representing the age range as (start_age, end_age).
+        min_age (int): The minimum age value.
+        max_age (int): The maximum age value.
+        num_intervals (int): The number of subintervals to divide the age interval into.
         
     Returns:
-        float: The median resting blood pressure.
+        list: A list of tuples representing the subintervals.
     """
-    median = df.loc[(df['Age'] >= age_range[0]) & (df['Age'] <= age_range[1]) & (df['RestingBP'] != 0), 'RestingBP'].median()
-    return median
+    min_age = df['Age'].min()
 
-def _replace_zero_resting_bp(df: pd.DataFrame, age_range: list, median: float) -> pd.DataFrame:
+    max_age = df['Age'].max()
+    
+    interval_size = (max_age - min_age) / num_intervals
+    subintervals = []
+    for i in range(num_intervals):
+        start_age = int(min_age + i * interval_size)
+        end_age = int(min_age + (i + 1) * interval_size - 1)
+        subintervals.append((start_age, end_age))
+    # Ensure the last subinterval ends at the maximum age
+    subintervals[-1] = (subintervals[-1][0], max_age)
+    return subintervals
+
+def _calculate_median_for_columns(df: pd.DataFrame, columns: list, age_range: tuple) -> pd.Series:
+        """
+        Calculate the median for specified columns within a given age range.
+        
+        Parameters:
+            df (pd.DataFrame): The DataFrame containing patient data.
+            columns (list): A list of column names for which to calculate the median.
+            age_range (tuple): A tuple representing the age range as (start_age, end_age).
+            
+        Returns:
+            pd.Series: A Series containing the median values for specified columns.
+        """
+        median_values = df.loc[(df['Age'] >= age_range[0]) & (df['Age'] <= age_range[1]), columns].median()
+        return median_values
+
+def _replace_zero_values_for_columns(df: pd.DataFrame, columns:list, age_range: tuple, median_values: pd.Series) -> pd.DataFrame:
     """
-    Replace zero 'RestingBP' values with the calculated median based on age range.
+    Replace zero values in specified columns with the calculated medians based on age range.
     
     Parameters:
-        df (DataFrame): The DataFrame containing patient data.
+        df (pd.DataFrame): The DataFrame containing patient data.
+        columns (list): A list of column names for which to replace zero values.
         age_range (tuple): A tuple representing the age range as (start_age, end_age).
-        median (float): The median resting blood pressure for the given age range.
+        median_values (pd.Series): A Series containing the median values for specified columns.
     """
-    df.loc[(df['Age'] >= age_range[0]) & (df['Age'] <= age_range[1]) & (df['RestingBP'] == 0), 'RestingBP'] = median
+    for column in columns:
+        df.loc[(df['Age'] >= age_range[0]) & (df['Age'] <= age_range[1]) & (df[column] == 0), column] = median_values[column]
     return df
 
-def _process_age_intervals(df: pd.DataFrame, age_intervals) -> pd.DataFrame:
+def _process_age_intervals_for_columns(df: pd.DataFrame, columns: list, age_intervals: list) -> pd.DataFrame:
     """
-    Orchestrate the process by iterating through age intervals and calling the necessary functions.
+    Orchestrate the process by iterating through age intervals and calling the necessary functions for specified columns.
     
     Parameters:
-        df (DataFrame): The DataFrame containing patient data.
+        df (pd.DataFrame): The DataFrame containing patient data.
+        columns (list): A list of column names for which to perform the imputation.
         age_intervals (list): A list of tuples representing age intervals as (start_age, end_age).
     """
     for age_range in age_intervals:
-        median = _calculate_median_resting_bp(df, age_range)
-        _replace_zero_resting_bp(df, age_range, median)
+        median_values = _calculate_median_for_columns(df, columns, age_range)
+        df = _replace_zero_values_for_columns(df, columns, age_range, median_values)
+    return df
+
+def _concatenate_dfs(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
+    """
+    Concatenates two pandas DataFrames vertically.
+
+    Args:
+        df1: First DataFrame to concatenate.
+        df2: Second DataFrame to concatenate.
+
+    Returns:
+        Concatenated DataFrame.
+    """
+    concatenated_df = pd.concat([df1, df2], ignore_index=True)
+    return concatenated_df
