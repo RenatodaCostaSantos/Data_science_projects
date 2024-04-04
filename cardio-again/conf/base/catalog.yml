@@ -2,6 +2,18 @@ heart:
   type: pandas.CSVDataset
   filepath: data/01_raw/heart.csv
 
+preprocess_males:
+  type: pandas.ParquetDataSet
+  filepath: data/02_intermediate/preprocess_males.parquet
+
+preprocess_females:
+  type: pandas.ParquetDataSet
+  filepath: data/02_intermediate/preprocess_females.parquet
+  
+preprocess_heart_df:
+  type: pandas.ParquetDataSet
+  filepath: data/02_intermediate/preprocess_heart_df.parquet
+
 # reviews:
 #   type: pandas.CSVDataset
 #   filepath: data/01_raw/reviews.csv
