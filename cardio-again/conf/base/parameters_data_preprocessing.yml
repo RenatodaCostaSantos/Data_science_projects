@@ -6,4 +6,3 @@
 
 num_intervals: 7
 columns_strange_zeros: ['RestingBP', 'Cholesterol']
-dfs_to_convert_to_float: [heartDF, male, female]

@@ -125,22 +125,22 @@ def _process_age_intervals_for_columns(
     return df
 
 
-def input_data_males(df: pd.DataFrame):
+def input_data_males(df: pd.DataFrame, num_intervals: int, columns_strange_zeros: list):
 
     male = _separate_male_female(df)[0]
     male = _replace_int_with_float(male) 
-    age_intervals = _divide_age_interval(male, num_intervals=7)
-    male = _process_age_intervals_for_columns(male, ['RestingBP','Cholesterol'], age_intervals)
+    age_intervals = _divide_age_interval(male, num_intervals)
+    male = _process_age_intervals_for_columns(male, columns_strange_zeros, age_intervals)
 
     return male
 
 
-def input_data_females(df: pd.DataFrame):
+def input_data_females(df: pd.DataFrame, num_intervals: int, columns_strange_zeros: list):
 
     female = _separate_male_female(df)[1]
     female = _replace_int_with_float(female) 
-    age_intervals = _divide_age_interval(female, num_intervals=7)
-    female = _process_age_intervals_for_columns(female, ['RestingBP','Cholesterol'], age_intervals)
+    age_intervals = _divide_age_interval(female, num_intervals)
+    female = _process_age_intervals_for_columns(female,columns_strange_zeros, age_intervals)
 
     return female
 

@@ -10,24 +10,23 @@ from .nodes import input_data_males, input_data_females, concatenate_dfs
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
-        node{
-            func = input_data_males,
-            input = "heart",
-            output= "male",
-            name= "preprocess_males",
+        node(
+            func=input_data_males,
+            inputs=["heart", "params:num_intervals", "params:columns_strange_zeros"],
+            outputs="male",
+            name="preprocess_males",
 
-        },
-        node{
+        ),
+        node(
             func = input_data_females,
-            input = "heart",
-            output= "female",
+            inputs= ["heart", "params:num_intervals", "params:columns_strange_zeros"],
+            outputs= "female",
             name= "preprocess_females",   
-
-        },
-        node{
+        ),
+        node(
             func = concatenate_dfs,
-            input= ["male","female"],
-            output="heartDF",
+            inputs= ["male","female"],
+            outputs="heartDF",
             name="preprocess_heart_df",
-        },
+        ),
     ])

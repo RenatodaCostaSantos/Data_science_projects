@@ -4,15 +4,15 @@ heart:
 
 preprocess_males:
   type: pandas.ParquetDataSet
-  filepath: data/02_intermediate/preprocess_males.parquet
+  filepath: data/02_intermediate/preprocess_males.pq
 
 preprocess_females:
   type: pandas.ParquetDataSet
-  filepath: data/02_intermediate/preprocess_females.parquet
-  
+  filepath: data/02_intermediate/preprocess_females.pq
+
 preprocess_heart_df:
   type: pandas.ParquetDataSet
-  filepath: data/02_intermediate/preprocess_heart_df.parquet
+  filepath: data/02_intermediate/preprocess_heart_df.pq
 
 # reviews:
 #   type: pandas.CSVDataset
