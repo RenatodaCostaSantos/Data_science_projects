@@ -6,7 +6,7 @@ generated using Kedro 0.19.0
 import pandas as pd
 
 
-def separate_male_female(df: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
+def _separate_male_female(df: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
     """
     Separate male and female records from the input DataFrame.
 
@@ -22,24 +22,21 @@ def separate_male_female(df: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
     return male, female
 
 
-def replace_int_with_float(df_list: list) -> list:
+def _replace_int_with_float(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Replace integer columns with float columns in a list of DataFrames.
+    Replace integer columns with float columns in a DataFrame.
 
     Args:
-        df_list: List of input DataFrames.
+        df: DataFrame.
 
     Returns:
-        List of DataFrames with integer columns replaced by float columns.
+        DataFrame with float numbers for columns with integer numbers.
     """
-    updated_df_list = []
-    for df in df_list:
-        for col in df.columns:
-            if df[col].dtype == "int64":  # Check if column type is int
-                df[col] = df[col].astype(float)  # Convert int to float
-        updated_df_list.append(df)
+    for col in df.columns:
+        if df[col].dtype == "int64":  # Check if column type is int
+            df[col] = df[col].astype(float)  # Convert int to float
 
-    return updated_df_list
+    return df
 
 
 def _divide_age_interval(df: pd.DataFrame, num_intervals: int) -> list:
@@ -128,7 +125,27 @@ def _process_age_intervals_for_columns(
     return df
 
 
-def _concatenate_dfs(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
+def input_data_males(df: pd.DataFrame):
+
+    male = _separate_male_female(df)[0]
+    male = _replace_int_with_float(male) 
+    age_intervals = _divide_age_interval(male, num_intervals=7)
+    male = _process_age_intervals_for_columns(male, ['RestingBP','Cholesterol'], age_intervals)
+
+    return male
+
+
+def input_data_females(df: pd.DataFrame):
+
+    female = _separate_male_female(df)[1]
+    female = _replace_int_with_float(female) 
+    age_intervals = _divide_age_interval(female, num_intervals=7)
+    female = _process_age_intervals_for_columns(female, ['RestingBP','Cholesterol'], age_intervals)
+
+    return female
+
+
+def concatenate_dfs(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
     """
     Concatenates two pandas DataFrames vertically.
 
