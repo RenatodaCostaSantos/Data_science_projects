@@ -6,6 +6,7 @@ generated using Kedro 0.19.0
 import pandas as pd
 
 
+
 def _separate_male_female(df: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
     """
     Separate male and female records from the input DataFrame.
@@ -32,10 +33,8 @@ def _replace_int_with_float(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         DataFrame with float numbers for columns with integer numbers.
     """
-    for col in df.columns:
-        if df[col].dtype == "int64":  # Check if column type is int
-            df[col] = df[col].astype(float)  # Convert int to float
-
+    int_columns = df.select_dtypes(include='int64').columns
+    df.loc[:, int_columns] = df.loc[:, int_columns].astype(float)
     return df
 
 

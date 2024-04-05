@@ -5,4 +5,8 @@
 # Link: https://docs.kedro.org/en/0.19.0/configuration/parameters.html
 
 num_intervals: 7
-columns_strange_zeros: ['RestingBP', 'Cholesterol']
+columns_strange_zeros: 
+  [
+    'RestingBP', 
+    'Cholesterol',
+  ]

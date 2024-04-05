@@ -1,0 +1,13 @@
+preprocess_males:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/males.csv
+
+
+preprocess_females:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/preprocess_females.pq
+
+
+preprocess_heart_df:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/preprocess_heart_df.pq
