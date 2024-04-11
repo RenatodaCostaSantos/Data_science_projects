@@ -2,7 +2,7 @@
 This is a boilerplate pipeline 'data_preprocessing'
 generated using Kedro 0.19.0
 """
-
+from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
 
 
@@ -157,3 +157,52 @@ def concatenate_dfs(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
     """
     concatenated_df = pd.concat([df1, df2], ignore_index=True)
     return concatenated_df
+
+
+def replace_binary_strings_with_float(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Replace binary string values in a DataFrame column with float numbers.
+
+    Args:
+        df: Input DataFrame with binary string values.
+
+    Returns:
+        pd.DataFrame: DataFrame with binary strings replaced with float numbers.
+    """
+    # Define mapping dictionary for binary strings to float numbers
+    binary_mapping = {'Y': 1, 'N': 0, 'M': 1, 'F': 0}  # You can extend this mapping as needed
+
+    # Replace binary strings with float numbers
+    df['binary_column'] = df['binary_column'].map(binary_mapping)
+
+    return df
+
+
+
+
+
+
+
+
+def scale_columns(data: pd.DataFrame, columns_to_rescale: list) -> pd.DataFrame:
+    """
+    Scale some numerical columns in a DataFrame using MinMaxScaler.
+
+    Args:
+        data: Input DataFrame to be scaled.
+        parameters: Parameters passed to the function.
+
+    Returns:
+        pd.DataFrame: Scaled DataFrame.
+
+    """
+    # Initialize MinMaxScaler
+    scaler = MinMaxScaler()
+
+    # Fit scaler to the data and transform it
+    scaled_data = scaler.fit_transform(data[columns_to_rescale])
+
+    # Convert the scaled array back to a DataFrame
+    #scaled_df = pd.DataFrame(scaled_data, columns=data.columns)
+
+    return scaled_data
