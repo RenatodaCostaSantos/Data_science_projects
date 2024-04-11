@@ -159,7 +159,7 @@ def concatenate_dfs(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
     return concatenated_df
 
 
-def replace_binary_strings_with_float(df: pd.DataFrame) -> pd.DataFrame:
+def replace_binary_strings_with_float(df: pd.DataFrame, binary_columns: pd.Series) -> pd.DataFrame:
     """
     Replace binary string values in a DataFrame column with float numbers.
 
@@ -170,10 +170,11 @@ def replace_binary_strings_with_float(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: DataFrame with binary strings replaced with float numbers.
     """
     # Define mapping dictionary for binary strings to float numbers
-    binary_mapping = {'Y': 1, 'N': 0, 'M': 1, 'F': 0}  # You can extend this mapping as needed
+    binary_mapping = {'Y': 1.0, 'N': 0.0, 'M': 1.0, 'F': 0.0}  # You can extend this mapping as needed
 
-    # Replace binary strings with float numbers
-    df['binary_column'] = df['binary_column'].map(binary_mapping)
+    for column in binary_columns:
+        # Replace binary strings with float numbers
+        df[column] = df[column].map(binary_mapping)
 
     return df
 

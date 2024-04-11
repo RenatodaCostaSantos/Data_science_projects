@@ -11,15 +11,6 @@ columns_strange_zeros:
   - Cholesterol
 
 columns_to_rescale:
-  # [
-  #   "ST_Slope_Up
-  #   'ExerciseAngina',
-  #   'Oldpeak', 
-  #   'Sex', 
-  #   'Age', 
-  #   'FastingBS',
-  #   'Cholesterol',
-  # ]
   - RestingBP
   - Cholesterol
   - ExerciseAngina
@@ -27,6 +18,10 @@ columns_to_rescale:
   - FastingBS
   - Age
   - MaxHR
+
+binary_columns:
+  - Sex
+  - ExerciseAngina
 
 
 
