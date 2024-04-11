@@ -32,8 +32,8 @@ def create_pipeline(**kwargs) -> Pipeline:
         node(
             replace_binary_strings_with_float,
             inputs=['join_males_females',"params:binary_columns"],
-            outputs='replace_binary_strings_with_float',
-            name='replace_binary_strings_with_float_node',
+            outputs='preprocessed_heartDF',
+            name='preprocessed_heartDF_node',
         ),
         node(
             func=scale_columns,

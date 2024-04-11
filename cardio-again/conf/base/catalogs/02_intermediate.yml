@@ -10,9 +10,9 @@ join_males_females:
   type: pandas.ParquetDataset
   filepath: data/02_intermediate/join_males_females.pq
 
-replace_binary_strings_with_float:
-  type: pandas.ParquetDataset
-  filepath: data/02_intermediate/replace_binary_strings_with_float.pq 
+# replace_binary_strings_with_float:
+#   type: pandas.ParquetDataset
+#   filepath: data/02_intermediate/replace_binary_strings_with_float.pq 
 
 preprocessed_heartDF:
   type: pandas.ParquetDataset

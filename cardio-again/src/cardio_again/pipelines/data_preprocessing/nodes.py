@@ -179,23 +179,16 @@ def replace_binary_strings_with_float(df: pd.DataFrame, binary_columns: pd.Serie
     return df
 
 
-
-
-
-
-
-
 def scale_columns(data: pd.DataFrame, columns_to_rescale: list) -> pd.DataFrame:
     """
     Scale some numerical columns in a DataFrame using MinMaxScaler.
 
     Args:
         data: Input DataFrame to be scaled.
-        parameters: Parameters passed to the function.
+        columns_to_rescale: List of column names to be scaled.
 
     Returns:
         pd.DataFrame: Scaled DataFrame.
-
     """
     # Initialize MinMaxScaler
     scaler = MinMaxScaler()
@@ -204,6 +197,10 @@ def scale_columns(data: pd.DataFrame, columns_to_rescale: list) -> pd.DataFrame:
     scaled_data = scaler.fit_transform(data[columns_to_rescale])
 
     # Convert the scaled array back to a DataFrame
-    #scaled_df = pd.DataFrame(scaled_data, columns=data.columns)
+    scaled_df = pd.DataFrame(scaled_data, columns=columns_to_rescale)
 
-    return scaled_data
+    # Concatenate the scaled columns with the non-scaled columns
+    non_scaled_columns = data.drop(columns=columns_to_rescale)
+    scaled_df = pd.concat([scaled_df, non_scaled_columns], axis=1)
+
+    return scaled_df
