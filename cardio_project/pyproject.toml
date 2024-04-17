@@ -42,9 +42,13 @@ tools = ['Linting', 'Testing', 'Custom Logging', 'Documentation', 'Data Structur
 source_dir = "src"
 
 [tool.pytest.ini_options]
-addopts = """
---cov-report term-missing \
---cov src/cardio_again -ra"""
+#addopts = """
+#--cov-report term-missing \
+#--cov src/cardio_again -ra"""
+pythonpath = "src"
+addopts = [
+    "--import-mode=importlib",
+]
 
 [tool.coverage.report]
 fail_under = 0
