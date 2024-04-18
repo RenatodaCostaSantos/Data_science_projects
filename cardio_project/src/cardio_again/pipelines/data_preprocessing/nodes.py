@@ -33,8 +33,12 @@ def _replace_int_with_float(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         DataFrame with float numbers for columns with integer numbers.
     """
+    # Get integer columns
     int_columns = df.select_dtypes(include='int64').columns
-    df.loc[:, int_columns] = df.loc[:, int_columns].astype(float)
+
+    # Convert integer columns to float type in the original DataFrame
+    df[int_columns] = df[int_columns].astype(float)
+
     return df
 
 
@@ -43,8 +47,7 @@ def _divide_age_interval(df: pd.DataFrame, num_intervals: int) -> list:
     Divide the interval between the minimum and maximum ages into the specified number of subintervals.men_list
 
     Parameters:
-        min_age (int): The minimum age value.
-        max_age (int): The maximum age value.
+        df (Dataframe)
         num_intervals (int): The number of subintervals to divide the age interval into.
 
     Returns:
