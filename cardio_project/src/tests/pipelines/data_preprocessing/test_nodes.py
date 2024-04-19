@@ -1,5 +1,5 @@
-from cardio_again.pipelines.data_preprocessing.nodes import _separate_male_female, _replace_int_with_float, _divide_age_interval
-
+from cardio_again.pipelines.data_preprocessing.nodes import _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
+import pandas as pd
 
 def test_separate_male_female(heart_df):
     """
@@ -75,3 +75,25 @@ def test_divide_age_interval(heart_df, params):
 
     # Check if the returned subintervals match the expected subintervals
     assert subintervals == expected_subintervals
+
+
+def test_calculate_median_for_columns():
+
+    # Built-in DataFrame for testing
+    test_df = pd.DataFrame({
+        "Age": [25, 30, 35, 40, 45, 50, 55],
+        "Weight": [70, 75, 80, 85, 90, 95, 100],
+        "Height": [160, 165, 170, 175, 180, 185, 190]
+    })
+
+    columns = ["Weight", "Height"]
+    age_range = (30, 50)
+
+    # Calculate median values using the function with the built-in DataFrame
+    test_result = _calculate_median_for_columns(test_df, columns, age_range)
+
+    # Expected median values for test DataFrame
+    expected_test_result = pd.Series({"Weight": 85.0, "Height": 175.0})
+
+    # Verify the result
+    assert test_result.equals(expected_test_result)
