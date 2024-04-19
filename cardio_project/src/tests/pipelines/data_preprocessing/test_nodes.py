@@ -1,4 +1,4 @@
-from cardio_again.pipelines.data_preprocessing.nodes import _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
+from cardio_again.pipelines.data_preprocessing.nodes import _replace_zero_values_for_columns, _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
 import pandas as pd
 
 def test_separate_male_female(heart_df):
@@ -97,3 +97,31 @@ def test_calculate_median_for_columns():
 
     # Verify the result
     assert test_result.equals(expected_test_result)
+
+def test_replace_zero_values_for_columns():
+    # Test DataFrame with zero values
+    test_df = pd.DataFrame({
+        "Age": [25, 30, 35, 40, 45, 50, 55],
+        "Weight": [70, 75, 0, 85, 90, 0, 100],
+        "Height": [160, 165, 170, 0, 180, 185, 0]
+    })
+
+    # Median values calculated for the specified columns and age range
+    median_values = pd.Series({"Weight": 85.0, "Height": 175.0})
+
+    columns = ["Weight", "Height"]
+    age_range = (30, 50)
+
+    # Run the function with the test DataFrame and median values
+    result_df = _replace_zero_values_for_columns(test_df.copy(), columns, age_range, median_values)
+    print(result_df)
+
+    # Expected DataFrame after replacing zero values
+    expected_result_df = pd.DataFrame({
+        "Age": [25, 30, 35, 40, 45, 50, 55],
+        "Weight": [70, 75, 85, 85, 90, 85, 100],
+        "Height": [160, 165, 170, 175, 180, 185, 0]
+    })
+
+    # Verify the result
+    pd.testing.assert_frame_equal(result_df, expected_result_df)
