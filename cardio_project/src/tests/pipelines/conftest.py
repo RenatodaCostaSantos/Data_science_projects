@@ -24,10 +24,10 @@ def heart_df(kedro_session):
 
     return df
 
-# @pytest.fixture(scope="session")
-# def params(kedro_session):
+@pytest.fixture(scope="session")
+def params(kedro_session):
 
-#     # Load DataFrame from the catalog
-#     df = kedro_session.load_context().params.load("heart")
+    # Load DataFrame from the catalog
+    params = kedro_session.load_context().params
 
-#     return df
+    return params
