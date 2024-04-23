@@ -85,6 +85,7 @@ def _calculate_median_for_columns(
     median_values = df.loc[
         (df["Age"] >= age_range[0]) & (df["Age"] <= age_range[1]), columns
     ].median()
+    print(median_values)
     return median_values
 
 
@@ -122,6 +123,7 @@ def _process_age_intervals_for_columns(
         age_intervals (list): A list of tuples representing age intervals as (start_age, end_age).
     """
     for age_range in age_intervals:
+        print(age_range)
         median_values = _calculate_median_for_columns(df, columns, age_range)
         df = _replace_zero_values_for_columns(df, columns, age_range, median_values)
     return df

@@ -1,4 +1,4 @@
-from cardio_again.pipelines.data_preprocessing.nodes import _replace_zero_values_for_columns, _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
+from cardio_again.pipelines.data_preprocessing.nodes import _process_age_intervals_for_columns, _replace_zero_values_for_columns, _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
 import pandas as pd
 
 def test_separate_male_female(heart_df):
@@ -87,13 +87,17 @@ def test_calculate_median_for_columns():
     })
 
     columns = ["Weight", "Height"]
-    age_range = (30, 50)
+    #age_range = (30, 50)
+    age_range = (30, 45)
 
     # Calculate median values using the function with the built-in DataFrame
     test_result = _calculate_median_for_columns(test_df, columns, age_range)
 
     # Expected median values for test DataFrame
-    expected_test_result = pd.Series({"Weight": 85.0, "Height": 175.0})
+    #expected_test_result = pd.Series({"Weight": 85.0, "Height": 175.0})
+
+    # Expected median values for test DataFrame
+    expected_test_result = pd.Series({"Weight": 82.5, "Height": 172.5})
 
     # Verify the result
     assert test_result.equals(expected_test_result)
@@ -106,21 +110,64 @@ def test_replace_zero_values_for_columns():
         "Height": [160, 165, 170, 0, 180, 185, 0]
     })
 
+    # Test 1
+    # # Median values calculated for the specified columns and age range
+    # median_values = pd.Series({"Weight": 85.0, "Height": 175.0})
+
+    # columns = ["Weight", "Height"]
+    # age_range = (30, 50)
+
+    # Test 2
     # Median values calculated for the specified columns and age range
-    median_values = pd.Series({"Weight": 85.0, "Height": 175.0})
+    median_values = pd.Series({"Weight": 85.0, "Height": 170.0})
 
     columns = ["Weight", "Height"]
-    age_range = (30, 50)
+    age_range = (25, 55)
 
     # Run the function with the test DataFrame and median values
     result_df = _replace_zero_values_for_columns(test_df.copy(), columns, age_range, median_values)
     print(result_df)
 
+    # Expected test 1
+    # # Expected DataFrame after replacing zero values
+    # expected_result_df = pd.DataFrame({
+    #     "Age": [25, 30, 35, 40, 45, 50, 55],
+    #     "Weight": [70, 75, 85, 85, 90, 85, 100],
+    #     "Height": [160, 165, 170, 175, 180, 185, 0]
+    # })
+
+    # Expected test 2
     # Expected DataFrame after replacing zero values
     expected_result_df = pd.DataFrame({
         "Age": [25, 30, 35, 40, 45, 50, 55],
         "Weight": [70, 75, 85, 85, 90, 85, 100],
-        "Height": [160, 165, 170, 175, 180, 185, 0]
+        "Height": [160, 165, 170, 170, 180, 185, 170]
+    })
+
+    # Verify the result
+    pd.testing.assert_frame_equal(result_df, expected_result_df)
+
+
+def test_process_age_intervals_for_columns():
+    # Test DataFrame with zero values
+    test_df = pd.DataFrame({
+        "Age": [25, 30, 35, 40, 45, 50, 55],
+        "Weight": [70.0, 75.0, 0.0, 85.0, 90.0, 0.0, 100.0],
+        "Height": [160.0, 165.0, 170.0, 0.0, 180.0, 185.0, 0.0]
+    })
+
+    columns = ["Weight", "Height"]
+    age_intervals = [(25, 35), (36, 60)]
+
+    # Run the function with the test DataFrame and age intervals
+    result_df = _process_age_intervals_for_columns(test_df.copy(), columns, age_intervals)
+    print(result_df)
+
+    # Expected DataFrame after processing age intervals
+    expected_result_df = pd.DataFrame({
+        "Age": [25, 30, 35, 40, 45, 50, 55],
+        "Weight": [70.0, 75.0, 70.0, 85.0, 90.0, 87.5, 100.0],
+        "Height": [160.0, 165.0, 170.0, 90.0, 180.0, 185.0, 90.0]
     })
 
     # Verify the result
