@@ -1,4 +1,4 @@
-from cardio_again.pipelines.data_preprocessing.nodes import concatenate_dfs, input_data_females, input_data_males, _process_age_intervals_for_columns, _replace_zero_values_for_columns, _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
+from cardio_again.pipelines.data_preprocessing.nodes import replace_binary_strings_with_float, concatenate_dfs, input_data_females, input_data_males, _process_age_intervals_for_columns, _replace_zero_values_for_columns, _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
 import pandas as pd
 
 def test_separate_male_female(heart_df):
@@ -232,15 +232,38 @@ def test_input_data_females():
 
 
 def test_concatenate_dfs():
-        # Create sample DataFrames
-        df1 = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
-        df2 = pd.DataFrame({'A': [7, 8, 9], 'B': [10, 11, 12]})
-        
-        # Expected concatenated DataFrame
-        expected_df = pd.DataFrame({'A': [1, 2, 3, 7, 8, 9], 'B': [4, 5, 6, 10, 11, 12]})
-        
-        # Call the function
-        result_df = concatenate_dfs(df1, df2)
-        
-        # Check if result matches expectation
-        pd.testing.assert_frame_equal(result_df,expected_df)
+    # Create sample DataFrames
+    df1 = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
+    df2 = pd.DataFrame({'A': [7, 8, 9], 'B': [10, 11, 12]})
+    
+    # Expected concatenated DataFrame
+    expected_df = pd.DataFrame({'A': [1, 2, 3, 7, 8, 9], 'B': [4, 5, 6, 10, 11, 12]})
+    
+    # Call the function
+    result_df = concatenate_dfs(df1, df2)
+    
+    # Check if result matches expectation
+    pd.testing.assert_frame_equal(result_df,expected_df)
+
+def test_replace_binary_strings_with_float():
+    # Create a sample DataFrame
+    data = {'A': ['Y', 'N', 'M', 'F'],
+            'B': ['Y', 'N', 'N', 'M'],
+            'C': ['M', 'F', 'Y', 'N']}
+    df = pd.DataFrame(data)
+    
+    # Define binary columns
+    binary_columns = ['A', 'B', 'C']
+    
+    # Expected DataFrame after replacement
+    expected_data = {'A': [1.0, 0.0, 1.0, 0.0],
+                     'B': [1.0, 0.0, 0.0, 1.0],
+                     'C': [1.0, 0.0, 1.0, 0.0]}
+                     
+    expected_df = pd.DataFrame(expected_data)
+    
+    # Call the function
+    result_df = replace_binary_strings_with_float(df, binary_columns)
+    
+    # Check if result matches expectation
+    pd.testing.assert_frame_equal(result_df, expected_df)
