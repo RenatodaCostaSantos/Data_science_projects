@@ -1,4 +1,4 @@
-from cardio_again.pipelines.data_preprocessing.nodes import input_data_females, input_data_males, _process_age_intervals_for_columns, _replace_zero_values_for_columns, _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
+from cardio_again.pipelines.data_preprocessing.nodes import concatenate_dfs, input_data_females, input_data_males, _process_age_intervals_for_columns, _replace_zero_values_for_columns, _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
 import pandas as pd
 
 def test_separate_male_female(heart_df):
@@ -229,3 +229,18 @@ def test_input_data_females():
     
     # Assert that the result matches the expected DataFrame
     pd.testing.assert_frame_equal(result, expected_result)
+
+
+def test_concatenate_dfs():
+        # Create sample DataFrames
+        df1 = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
+        df2 = pd.DataFrame({'A': [7, 8, 9], 'B': [10, 11, 12]})
+        
+        # Expected concatenated DataFrame
+        expected_df = pd.DataFrame({'A': [1, 2, 3, 7, 8, 9], 'B': [4, 5, 6, 10, 11, 12]})
+        
+        # Call the function
+        result_df = concatenate_dfs(df1, df2)
+        
+        # Check if result matches expectation
+        pd.testing.assert_frame_equal(result_df,expected_df)
