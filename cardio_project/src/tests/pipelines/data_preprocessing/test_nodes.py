@@ -1,4 +1,4 @@
-from cardio_again.pipelines.data_preprocessing.nodes import _process_age_intervals_for_columns, _replace_zero_values_for_columns, _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
+from cardio_again.pipelines.data_preprocessing.nodes import input_data_males, _process_age_intervals_for_columns, _replace_zero_values_for_columns, _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
 import pandas as pd
 
 def test_separate_male_female(heart_df):
@@ -172,3 +172,31 @@ def test_process_age_intervals_for_columns():
 
     # Verify the result
     pd.testing.assert_frame_equal(result_df, expected_result_df)
+
+
+def test_input_data_males():
+
+       # Create a test DataFrame
+    data = pd.DataFrame({
+        'Sex': ['M', 'M', 'M', 'F', 'M',"M"],
+        'Age': [25, 30, 40, 35, 28, 45],
+        'Column_A': [10, 0, 20, 0, 15, 30],
+        'Column_B': [10, 15, 0, 25, 0, 35]
+    })
+    # Call the function
+    num_intervals = 2
+    columns_strange_zeros = ['Column_A', 'Column_B']
+    result = input_data_males(data, num_intervals, columns_strange_zeros).reset_index(drop=True)
+    print(result)
+    
+    # Expected DataFrame after processing
+    expected_result = pd.DataFrame({
+        'Sex': ['M', 'M', 'M', 'M', 'M'],
+        'Age': [25.0, 30.0, 40.0, 28.0, 45.0],
+        'Column_A': [10.0, 10.0, 20.0, 15.0, 30.0],  # Zeros replaced with median for male age groups
+        'Column_B': [10.0, 15.0, 17.5, 10.0, 35.0]   # Zeros replaced with median for male age groups
+    })
+    print(expected_result)
+    
+    # Assert that the result matches the expected DataFrame
+    pd.testing.assert_frame_equal(result, expected_result)

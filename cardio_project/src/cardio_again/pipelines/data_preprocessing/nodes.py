@@ -17,9 +17,8 @@ def _separate_male_female(df: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
     Returns:
         Tuple containing two DataFrames, one for males and one for females.
     """
-    sex = ["M", "F"]
-    male = df[df["Sex"] == sex[0]]
-    female = df[df["Sex"] == sex[1]]
+    male = df[df["Sex"] == 'M']
+    female = df[df["Sex"] =='F']
     return male, female
 
 
@@ -134,6 +133,7 @@ def input_data_males(df: pd.DataFrame, num_intervals: int, columns_strange_zeros
     male = _separate_male_female(df)[0]
     male = _replace_int_with_float(male) 
     age_intervals = _divide_age_interval(male, num_intervals)
+    print(age_intervals)
     male = _process_age_intervals_for_columns(male, columns_strange_zeros, age_intervals)
 
     return male

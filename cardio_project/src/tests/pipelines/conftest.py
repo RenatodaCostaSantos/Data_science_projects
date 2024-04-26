@@ -1,6 +1,7 @@
 from kedro.framework.session import KedroSession
 from pathlib import Path
 from kedro.framework.startup import bootstrap_project
+import pandas as pd
 
 import pytest
 
@@ -31,3 +32,4 @@ def params(kedro_session):
     params = kedro_session.load_context().params
 
     return params
+
