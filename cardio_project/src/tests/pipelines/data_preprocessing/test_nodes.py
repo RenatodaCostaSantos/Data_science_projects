@@ -1,4 +1,4 @@
-from cardio_again.pipelines.data_preprocessing.nodes import replace_binary_strings_with_float, concatenate_dfs, input_data_females, input_data_males, _process_age_intervals_for_columns, _replace_zero_values_for_columns, _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
+from cardio_again.pipelines.data_preprocessing.nodes import scale_columns, replace_binary_strings_with_float, concatenate_dfs, input_data_females, input_data_males, _process_age_intervals_for_columns, _replace_zero_values_for_columns, _separate_male_female, _replace_int_with_float, _divide_age_interval, _calculate_median_for_columns
 import pandas as pd
 
 def test_separate_male_female(heart_df):
@@ -267,3 +267,36 @@ def test_replace_binary_strings_with_float():
     
     # Check if result matches expectation
     pd.testing.assert_frame_equal(result_df, expected_df)
+
+
+def test_scale_columns():
+    # Create a sample DataFrame
+    data = {'A': [1, 2, 3, 4],
+            'B': [5, 6, 7, 8],
+            'C': [9, 10, 11, 12]}
+    df = pd.DataFrame(data)
+    
+    # Define columns to be scaled
+    columns_to_rescale = ['A', 'B']
+    
+    # Expected DataFrame after scaling
+    expected_data = {'A': [0.0, 0.333333, 0.666667, 1.0],
+                     'B': [0.0, 0.333333, 0.666667, 1.0],
+                     'C': [9, 10, 11, 12]}
+    expected_df = pd.DataFrame(expected_data)
+    
+    # Call the function
+    result_df = scale_columns(df, columns_to_rescale)
+
+     # Check if result matches expectation
+    pd.testing.assert_frame_equal(result_df, expected_df)
+    
+    
+    # Check if scaled columns match the expected values
+    # for column in columns_to_rescale:
+    #     print(f"Column: {column}")
+    #     print("Actual:")
+    #     print(result_df[column])
+    #     print("Expected:")
+    #     print(expected_df[column])
+    #     assert result_df[column].equals(expected_df[column])

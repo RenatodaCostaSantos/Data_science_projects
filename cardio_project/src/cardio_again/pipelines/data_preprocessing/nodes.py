@@ -38,6 +38,9 @@ def _replace_int_with_float(df: pd.DataFrame) -> pd.DataFrame:
     # Convert integer columns to float type in the original DataFrame
     df[int_columns] = df[int_columns].astype(float)
 
+    for col in int_columns:
+        print(df[col].dtype)
+
     return df
 
 
@@ -209,3 +212,4 @@ def scale_columns(data: pd.DataFrame, columns_to_rescale: list) -> pd.DataFrame:
     scaled_df = pd.concat([scaled_df, non_scaled_columns], axis=1)
 
     return scaled_df
+
