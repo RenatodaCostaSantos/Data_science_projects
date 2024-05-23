@@ -15,8 +15,6 @@ def split_data(model_input: pd.DataFrame, parameters: dict) -> tuple:
     Args:
         model_input: Kedro DataCatalog containing the dataset to be split.
         parameters: A dictionary in the catalog containing the parameters required to split the data.
-        test_size_param: Parameter name in the catalog for the test size.
-        random_state_param: Parameter name in the catalog for the random state.
 
     Returns:
         Tuple containing the training and test datasets as pandas DataFrames.
@@ -27,8 +25,6 @@ def split_data(model_input: pd.DataFrame, parameters: dict) -> tuple:
     X_train, X_test, y_train, y_test = train_test_split(model_input, parameters["test_size"], parameters["random_state"])
 
     return X_train, X_test, y_train, y_test
-
-
 
 
 
